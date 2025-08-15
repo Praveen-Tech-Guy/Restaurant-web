@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Sexy Restaurants — Ultimate One-file Site</title>
+
+<style>
+  /* Root variables */
+  :root{
+    --bg:#fffaf7;
+    --muted:#6b7280;
+    --accent:#c026d3;
+    --accent-dark:#a21caf;
+    --primary:#e11d48;
+    --primary-dark:#be123c;
+    --glass: rgba(255,255,255,0.3);
+    --card:#ffffff;
+    --shadow: 0 6px 24px rgba(16,24,40,0.08);
+    --rounded-lg: 18px;
+    --rounded-xl: 24px;
+    --max-w: 1200px;
+    font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  }
+  * {
+    box-sizing: border-box;
+  }
+  html, body {
+    margin: 0; padding: 0; height: 100%; background: linear-gradient(180deg,#fffaf7 0%, #fff 100%);
+    color: #0f172a;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    line-height: 1.45;
+    overflow-x: hidden;
+  }
+  img {
+    max-width: 100%;
+    display: block;
+  }
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  /* Container and layout */
+  .container {
+    width: calc(100% - 40px);
+    max-width: var(--max-w);
+    margin: 0 auto;
+  }
+  .flex {
+    display: flex;
+  }
+  .flex-center {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .gap-4 { gap: 1rem; }
+  .gap-6 { gap: 1.5rem; }
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  /* Typography */
+  h1 {
+    font-size: 2.5rem;
+    line-height: 1.05;
+    margin: 0;
+    font-weight: 800;
+  }
+  h2 {
+    font-size: 1.5rem;
+    margin: 0;
+    font-weight: 700;
+  }
+  h3 {
+    font-size: 1.125rem;
+    margin: 0;
+    font-weight: 600;
+  }
+  p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .lead {
+    font-size: 1.125rem;
+    color: #334155;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    padding: 0.65rem 1rem; border-radius: 999px;
+    font-weight: 600; border: 0; cursor: pointer;
+    transition: all 0.18s ease;
+    box-shadow: 0 6px 18px rgba(16,24,40,0.06);
+    background: var(--primary);
+    color: white;
+    user-select:none;
+  }
+  .btn.secondary {
+    background: white;
+    color: var(--primary);
+    border: 1px solid #f1f5f9;
+  }
+  .btn.ghost {
+    background: transparent;
+    color: var(--primary);
+  }
+  .btn:active {
+    transform: translateY(1px);
+  }
+  .btn.small {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.9rem;
+  }
+  .btn-lg {
+    padding: 0.95rem 1.6rem;
+    font-size: 1.05rem;
+    border-radius: 16px;
+  }
+
+  /* Cards & Glassmorphism */
+  .card {
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    border-radius: var(--rounded-lg);
+    box-shadow: var(--shadow);
+    overflow: hidden;
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #1e293b;
+  }
+  .card .card-body {
+    padding: 1rem;
+  }
+  .rounded-xl {
+    border-radius: var(--rounded-xl);
+  }
+  .rounded-lg {
+    border-radius: var(--rounded-lg);
+  }
+
+  /* Header / Nav */
+  header.site-header {
+    position: sticky;
+    top: 0; z-index: 60;
+    background: linear-gradient(180deg, rgba(255,255,255,0.75), rgba(255,255,255,0.5));
+    backdrop-filter: blur(8px);
+    border-radius: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+    border-bottom: 1px solid rgba(15,23,42,0.08);
+    animation: fadeSlideDown 0.8s ease forwards;
+  }
+  .nav {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1rem 0;
+  }
+  .brand {
+    font-weight: 800;
+    font-size: 1.25rem;
+    color: var(--primary);
+    user-select:none;
+  }
+  .brand span {
+    color: var(--accent);
+  }
+  .nav-links {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .nav-links a {
+    padding: 0.5rem 0.6rem;
+    border-radius: 10px;
+    color: #0f172a;
+    font-weight: 600;
+    user-select:none;
+  }
+  .nav-links a:hover {
+    background: var(--accent);
+    color: white;
+  }
+  .nav-hamburger {
+    display: none;
+    padding: 0.4rem;
+    border-radius: 8px;
+    font-size: 1.5rem;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    user-select:none;
+  }
+
+  /* Hero */
+  .hero {
+    min-height: 82vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    padding: 3rem 0;
+    animation: fadeSlideUp 1s ease forwards;
+  }
+  .hero::before {
+    content: "";
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-image:
+      linear-gradient(180deg, rgba(0,0,0,0.28), rgba(0,0,0,0.28)),
+      url('https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=1800&q=80');
+    background-size: cover;
+    background-position: center;
+    filter: brightness(0.75);
+    clip-path: polygon(0 0, 100% 0, 100% 85%, 0 100%);
+    z-index: -1;
+    transform: translateZ(0);
+    will-change: transform;
+  }
+  .hero .hero-inner {
+    display: flex;
+    gap: 2rem;
+    align-items: center;
+    max-width: var(--max-w);
+    margin: 0 auto;
+    width: 100%;
+    padding: 0 20px;
+  }
+  .hero .left {
+    flex: 1;
+    max-width: 640px;
+  }
+  .hero h1 {
+    font-size: 3rem;
+    color: white;
+    margin-bottom: 0.6rem;
+    user-select:none;
+  }
+  .hero p {
+    color: rgba(255,255,255,0.9);
+    font-size: 1.1rem;
+    line-height: 1.4;
+    user-select:none;
+  }
+  .badge {
+    display: inline-block;
+    padding: 0.4rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255,255,255,0.08);
+    font-weight: 600;
+    color: white;
+    user-select:none;
+  }
+  .hero .mt-6 {
+    margin-top: 1.5rem;
+  }
+  .hero-visual {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+  }
+  .hero-visual .phone {
+    width: 320px;
+    height: 640px;
+    border-radius: 28px;
+    background: linear-gradient(180deg,#111827,#0b1220);
+    box-shadow: 0 30px 60px rgba(2,6,23,0.6);
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    clip-path: polygon(15px 0%, calc(100% - 15px) 0%, 100% 20px, 100% calc(100% - 20px), calc(100% - 15px) 100%, 15px 100%, 0% calc(100% - 20px), 0% 20px);
+  }
+  .hero-visual .phone img {
+    height: 100%;
+    border-radius: 12px;
+    object-fit: cover;
+  }
+
+  /* Sections spacing */
+  section {
+    padding: 4rem 0;
+  }
+  .section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+    user-select:none;
+  }
+  .subtitle {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+
+  /* Grid utilities */
+  .grid {
+    display: grid;
+    grid-gap: 1rem;
+  }
+  .grid.cols-3 {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  .grid.cols-2 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .grid.cols-4 {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  /* Menu layout */
+  .menu-category {
+    padding: 1rem;
+    border-radius: 12px;
+    background: var(--glass);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 6px 24px rgba(2,6,23,0.04);
+    border: 1px solid rgba(255,255,255,0.25);
+    color: #1e293b;
+  }
+  .menu-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .menu-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.6rem 0;
+    border-bottom: 1px dashed rgba(2,6,23,0.04);
+    font-weight: 600;
+  }
+  .menu-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Testimonials */
+  .test-card {
+    padding: 1.25rem;
+    border-radius: 14px;
+    background: var(--glass);
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 30px rgba(2,6,23,0.06);
+    color: #1e293b;
+    transition: opacity 0.5s ease;
+  }
+  .stars {
+    color: #f59e0b;
+  }
+
+  /* Gallery */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  .gallery img {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.1);
+  }
+  .gallery img:hover {
+    transform: scale(1.05);
+  }
+
+  /* Forms */
+  .input {
+    width: 100%;
+    padding: 0.85rem;
+    border-radius: 10px;
+    border: 1px solid rgba(2,6,23,0.06);
+    outline: none;
+    font-size: 1rem;
+    background: white;
+    transition: box-shadow 0.3s ease, border-color 0.3s ease;
+  }
+  .input:focus {
+    box-shadow: 0 8px 30px rgba(2,6,23,0.06);
+    border-color: rgba(0,0,0,0.12);
+  }
+
+  /* Floating CTA */
+  .floating-ctas {
+    position: fixed;
+    right: 20px;
+    bottom: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 80;
+  }
+  .fab {
+    width: 56px;
+    height: 56px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    box-shadow: 0 12px 30px rgba(2,6,23,0.18);
+    cursor: pointer;
+    user-select:none;
+    font-size: 1.5rem;
+    transition: transform 0.25s ease;
+    background: var(--primary);
+  }
+  .fab.whatsapp {
+    background: linear-gradient(180deg, #10b981, #059669);
+  }
+  .fab.call {
+    background: linear-gradient(180deg, #2563eb, #1d4ed8);
+  }
+  .fab.register {
+    background: linear-gradient(180deg, var(--primary), var(--primary-dark));
+  }
+  .fab:hover {
+    transform: scale(1.1);
+  }
+
+  /* Footer */
+  footer {
+    padding: 2.6rem 0;
+    background: linear-gradient(180deg, #0f172a, #0b1220);
+    color: white;
+    user-select:none;
+  }
+  footer .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+  .social {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+  }
+  .social a {
+    color: white;
+    font-weight: 600;
+    transition: color 0.25s ease;
+  }
+  .social a:hover {
+    color: var(--accent);
+  }
+
+  /* Modal */
+  .modal {
+    position: fixed;
+    left: 0; top: 0; right: 0; bottom: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    background: rgba(2,6,23,0.6);
+    z-index: 100;
+  }
+  .modal.show {
+    display: flex;
+  }
+  .modal-card {
+    background: white;
+    border-radius: 14px;
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 720px;
+    box-shadow: 0 30px 80px rgba(2,6,23,0.5);
+  }
+  .modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+  .close {
+    background: transparent;
+    border: 0;
+    font-size: 1.5rem;
+    cursor: pointer;
+    user-select:none;
+  }
+
+  /* Responsive */
+  @media (max-width: 1024px) {
+    .hero h1 {
+      font-size: 2.2rem;
+    }
+    .hero {
+      min-height: 75vh;
+    }
+    .gallery {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  @media (max-width: 760px) {
+    .nav-links {
+      display: none;
+    }
+    .nav-hamburger {
+      display: inline-flex;
+    }
+    .hero {
+      padding: 2rem 0;
+    }
+    .hero-inner {
+      flex-direction: column-reverse;
+      align-items: flex-start;
+    }
+    .hero-visual .phone {
+      width: 220px;
+      height: 480px;
+    }
+    .grid.cols-3 {
+      grid-template-columns: 1fr;
+    }
+    .gallery {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* Tiny utilities */
+  .text-center {
+    text-align: center;
+  }
+  .mt-2 {
+    margin-top: 0.5rem;
+  }
+  .mt-4 {
+    margin-top: 1rem;
+  }
+  .mt-6 {
+    margin-top: 1.5rem;
+  }
+  .mb-2 {
+    margin-bottom: 0.5rem;
+  }
+  .mb-4 {
+    margin-bottom: 1rem;
+  }
+  .mb-6 {
+    margin-bottom: 1.5rem;
+  }
+  .p-4 {
+    padding: 1rem;
+  }
+  .p-6 {
+    padding: 1.5rem;
+  }
+  .p-8 {
+    padding: 2rem;
+  }
+
+  /* Clip-path with rounded corners helper */
+  .clip-rounded {
+    clip-path: polygon(
+      10px 0%, calc(100% - 10px) 0%, 100% 10px, 100% calc(100% - 10px),
+      calc(100% - 10px) 100%, 10px 100%, 0% calc(100% - 10px), 0% 10px
+    );
+  }
+
+  /* Animations */
+  @keyframes fadeSlideDown {
+    0% {opacity: 0; transform: translateY(-20px);}
+    100% {opacity: 1; transform: translateY(0);}
+  }
+  @keyframes fadeSlideUp {
+    0% {opacity: 0; transform: translateY(20px);}
+    100% {opacity: 1; transform: translateY(0);}
+  }
+  @keyframes fadeInScale {
+    0% {opacity: 0; transform: scale(0.95);}
+    100% {opacity: 1; transform: scale(1);}
+   /* Animations continued */
+  }
+</style>
+
+</head>
+<body>
+
+<header class="site-header container" role="banner">
+  <nav class="nav" aria-label="Primary navigation">
+    <a href="#" class="brand" aria-label="Site logo">Sexy<span>Restaurants</span></a>
+    <button class="nav-hamburger" aria-expanded="false" aria-controls="primary-navigation" aria-label="Menu">&#9776;</button>
+    <div class="nav-links" id="primary-navigation">
+      <a href="#menu">Menu</a>
+      <a href="#gallery">Gallery</a>
+      <a href="#testimonials">Testimonials</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<main role="main">
+  <section class="hero">
+    <div class="hero-inner container">
+      <div class="left">
+        <span class="badge">Luxury dining experience</span>
+        <h1>Make Your Restaurant Shine<br>Like Never Before</h1>
+        <p class="lead">Boost your sales, engage your customers and stand out with a sexy website designed to impress and convert.</p>
+        <div class="mt-6">
+          <button class="btn" id="btn-whatsapp-hero" aria-label="Contact via WhatsApp">Chat on WhatsApp</button>
+          <button class="btn secondary" id="btn-contact-hero" aria-label="Open contact form">Contact Us</button>
+        </div>
+      </div>
+      <div class="hero-visual clip-rounded" aria-hidden="true">
+        <div class="phone">
+          <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80" alt="Sample restaurant mobile view" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="menu" class="container" aria-label="Restaurant menu">
+    <div class="section-title">
+      <h2>Our Luxurious Menu</h2>
+      <p class="subtitle">From starters to desserts, all handpicked for your delight.</p>
+    </div>
+    <div class="grid cols-3">
+      <div class="menu-category card clip-rounded" role="region" aria-labelledby="starters-title">
+        <h3 id="starters-title">Starters</h3>
+        <ul class="menu-list">
+          <li class="menu-item"><span>Truffle Mushroom Soup</span><span>$12</span></li>
+          <li class="menu-item"><span>Seared Scallops</span><span>$18</span></li>
+          <li class="menu-item"><span>Beef Carpaccio</span><span>$16</span></li>
+        </ul>
+      </div>
+      <div class="menu-category card clip-rounded" role="region" aria-labelledby="mains-title">
+        <h3 id="mains-title">Main Courses</h3>
+        <ul class="menu-list">
+          <li class="menu-item"><span>Grilled Wagyu Steak</span><span>$45</span></li>
+          <li class="menu-item"><span>Black Garlic Ramen</span><span>$22</span></li>
+          <li class="menu-item"><span>Pan-Seared Salmon</span><span>$30</span></li>
+        </ul>
+      </div>
+      <div class="menu-category card clip-rounded" role="region" aria-labelledby="desserts-title">
+        <h3 id="desserts-title">Desserts</h3>
+        <ul class="menu-list">
+          <li class="menu-item"><span>Matcha Tiramisu</span><span>$10</span></li>
+          <li class="menu-item"><span>Chocolate Lava Cake</span><span>$12</span></li>
+          <li class="menu-item"><span>Crème Brûlée</span><span>$11</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="gallery" class="container" aria-label="Gallery">
+    <div class="section-title">
+      <h2>Gallery</h2>
+      <p class="subtitle">See the beauty that awaits your guests.</p>
+    </div>
+    <div class="gallery clip-rounded" role="list">
+      <img src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=600&q=80" alt="Restaurant interior 1" role="listitem" tabindex="0" />
+      <img src="https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=600&q=80" alt="Gourmet dish 2" role="listitem" tabindex="0" />
+      <img src="https://images.unsplash.com/photo-1478145046317-39f10e56b5e9?auto=format&fit=crop&w=600&q=80" alt="Elegant table setup" role="listitem" tabindex="0" />
+      <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=600&q=80" alt="Bar counter 4" role="listitem" tabindex="0" />
+      <img src="https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=600&q=80" alt="Cocktail drinks" role="listitem" tabindex="0" />
+      <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f12ee?auto=format&fit=crop&w=600&q=80" alt="Dessert plate" role="listitem" tabindex="0" />
+    </div>
+  </section>
+
+  <section id="testimonials" class="container" aria-label="Testimonials">
+    <div class="section-title">
+      <h2>What Our Clients Say</h2>
+      <p class="subtitle">We make their restaurants shine, hear from them.</p>
+    </div>
+    <div class="testimonial-slider card clip-rounded" role="list" aria-live="polite" aria-atomic="true">
+      <div class="test-card" role="listitem">
+        <p>“Our sales jumped 40% after launching this website. Customers keep complimenting the look!”</p>
+        <div class="stars" aria-label="5 stars">★★★★★</div>
+        <strong>- Rina S., Owner of The Orchid</strong>
+      </div>
+      <div class="test-card" role="listitem" style="display:none;">
+        <p>“The WhatsApp chat integration is a game-changer. Instant customer interaction boosted reservations.”</p>
+        <div class="stars" aria-label="5 stars">★★★★★</div>
+        <strong>- Marcus P., Chef & Owner, La Bella Vita</strong>
+      </div>
+      <div class="test-card" role="listitem" style="display:none;">
+        <p>“A stunning, modern design that really sets us apart from local competition.”</p>
+        <div class="stars" aria-label="5 stars">★★★★★</div>
+        <strong>- Sarah K., Manager, Ocean Breeze Cafe</strong>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="container" aria-label="Contact form">
+    <div class="section-title">
+      <h2>Get in Touch</h2>
+      <p class="subtitle">Want a sexy website or have questions? Reach out now.</p>
+    </div>
+    <form id="contact-form" class="card clip-rounded" novalidate>
+      <div class="stack">
+        <label for="name">Your Name</label>
+        <input type="text" id="name" name="name" class="input" placeholder="John Doe" required aria-required="true" />
+      </div>
+      <div class="stack mt-4">
+        <label for="email">Email address</label>
+        <input type="email" id="email" name="email" class="input" placeholder="john@example.com" required aria-required="true" />
+      </div>
+      <div class="stack mt-4">
+        <label for="message">Message</label>
+        <textarea id="message" name="message" class="input" rows="4" placeholder="Tell us what you need..." required aria-required="true"></textarea>
+      </div>
+      <button type="submit" class="btn mt-6" aria-label="Send message via WhatsApp">Send via WhatsApp</button>
+    </form>
+  </section>
+</main>
+
+<footer role="contentinfo" aria-label="Footer">
+  <div class="container flex-center gap-4" style="flex-wrap: wrap;">
+    <p>&copy; 2025 Sexy Restaurants. All rights reserved.</p>
+    <div class="social" role="list">
+      <a href="https://twitter.com/" target="_blank" rel="noopener" role="listitem" aria-label="Twitter">Twitter</a>
+      <a href="https://facebook.com/" target="_blank" rel="noopener" role="listitem" aria-label="Facebook">Facebook</a>
+      <a href="https://instagram.com/" target="_blank" rel="noopener" role="listitem" aria-label="Instagram">Instagram</a>
+    </div>
+  </div>
+</footer>
+
+<!-- Lightbox modal for gallery -->
+<div class="modal" id="lightbox" aria-hidden="true" aria-label="Image preview" role="dialog" aria-modal="true">
+  <div class="modal-card">
+    <button class="close" aria-label="Close image preview">&times;</button>
+    <img src="" alt="" style="max-width: 100%; border-radius: 14px;" />
+  </div>
+</div>
+
+<!-- Floating WhatsApp & Call buttons -->
+<div class="floating-ctas" aria-label="Quick contact buttons">
+  <button class="fab whatsapp" aria-label="Chat on WhatsApp" id="btn-whatsapp-float" title="Chat on WhatsApp">
+    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" height="24" width="24" viewBox="0 0 24 24"><path d="M16.65 13.4a2.72 2.72 0 0 1-1.8-2.5 2.7 2.7 0 0 1 2.7-2.7 2.72 2.72 0 0 1 2.5 1.8m-5.44-4a7.53 7.53 0 0 1 7.54 7.54 7.52 7.52 0 0 1-13.3 5.04L4 20l1.5-4.4A7.52 7.52 0 0 1 11.22 9.39z"/></svg>
+  </button>
+  <button class="fab call" aria-label="Call" id="btn-call-float" title="Call us">
+    <svg fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" height="24" width="24" viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.88 19.88 0 0 1 3 6.18 2 2 0 0 1 5 4h3a2 2 0 0 1 2 1.72c.12.81.4 1.58.81 2.3a2 2 0 0 1-.45 2.11L9.91 11a16 16 0 0 0 4.1 4.1l1.05-1.05a2 2 0 0 1 2.11-.45c.72.41 1.49.69 2.3.81a2 2 0 0 1 1.72 2z"/></svg>
+  </button>
+</div>
+
+<script>
+  // --- Navigation hamburger toggle for small screens ---
+  const navToggle = document.querySelector('.nav-hamburger');
+  const navLinks = document.getElementById('primary-navigation');
+
+  navToggle.addEventListener('click', () => {
+    const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+    navToggle.setAttribute('aria-expanded', !expanded);
+    navLinks.style.display = expanded ? 'none' : 'flex';
+  });
+
+  // --- WhatsApp message sending ---
+  const whatsappNumber = '917028115061'; // Indian country code + your number without 0
+
+  // Format text for WhatsApp URL
+  function encodeWhatsAppMessage(name, message) {
+    return encodeURIComponent(`Hello, my name is ${name}.\n${message}`);
+  }
+
+  // Button in hero
+  document.getElementById('btn-whatsapp-hero').addEventListener('click', () => {
+    const url = `https://wa.me/${whatsappNumber}?text=Hi%20I%20am%20interested%20in%20your%20restaurant%20website%20services.`;
+    window.open(url, '_blank');
+  });
+
+  // Floating WhatsApp button
+  document.getElementById('btn-whatsapp-float').addEventListener('click', () => {
+    const url = `https://wa.me/${whatsappNumber}?text=Hi%20I%20want%20to%20know%20more%20about%20your%20services.`;
+    window.open(url, '_blank');
+  });
+
+  // Floating call button
+  document.getElementById('btn-call-float').addEventListener('click', () => {
+    window.location.href = 'tel:+917028115061';
+  });
+
+  // Contact form sending via WhatsApp
+  document.getElementById('contact-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const name = e.target.name.value.trim();
+    const email = e.target.email.value.trim();
+    const message = e.target.message.value.trim();
+    if(!name || !email || !message) {
+      alert('Please fill in all fields.');
+      return;
+    }
+    // Compose WhatsApp message
+    let text = `Hello, my name is ${name}.\nEmail: ${email}\nMessage: ${message}`;
+    const waUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+    e.target.reset();
+  });
+
+  // --- Testimonial auto-slide ---
+  const testimonials = document.querySelectorAll('.testimonial-slider .test-card');
+  let currentTestimonial = 0;
+
+  function showTestimonial(idx) {
+    testimonials.forEach((t, i) => {
+      t.style.display = i === idx ? 'block' : 'none';
+    });
+  }
+  showTestimonial(currentTestimonial);
+
+  setInterval(() => {
+    currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+    showTestimonial(currentTestimonial);
+  }, 6000);
+
+  // --- Lightbox gallery ---
+  const galleryImages = document.querySelectorAll('.gallery img');
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImage = lightbox.querySelector('img');
+  const lightboxClose = lightbox.querySelector('.close');
+
+  galleryImages.forEach(img => {
+    img.addEventListener('click', () => {
+      lightboxImage.src = img.src;
+      lightboxImage.alt = img.alt;
+      lightbox.classList.add('show');
+      lightbox.setAttribute('aria-hidden', 'false');
+      lightboxClose.focus();
+    });
+    img.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        img.click();
+      }
+    });
+  });
+
+  lightboxClose.addEventListener('click', () => {
+    lightbox.classList.remove('show');
+    lightbox.setAttribute('aria-hidden', 'true');
+  });
+  lightbox.addEventListener('click', e => {
+    if(e.target === lightbox) {
+      lightbox.classList.remove('show');
+      lightbox.setAttribute('aria-hidden', 'true');
+    }
+  });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && lightbox.classList.contains('show')){
+      lightbox.classList.remove('show');
+      lightbox.setAttribute('aria-hidden', 'true');
+    }
+  });
+
+  // --- Parallax hero background ---
+  const hero = document.querySelector('.hero');
+  window.addEventListener('scroll', () => {
+    let scrollY = window.scrollY;
+    // Move background slower to create parallax effect
+    hero.style.setProperty('--bg-pos-y', `${scrollY * 0.4}px`);
+  });
+
+  // Animate hero background with CSS variable
+  const heroBefore = document.querySelector('.hero::before');
+  // Instead, let's update background-position in hero::before via JS using hero.style.backgroundPosition
+  // We can do it by targeting .hero::before styles via JS is tricky; let's use inline styles instead:
+
+  // We update the background-position Y dynamically:
+  window.addEventListener('scroll', () => {
+    let pos = window.scrollY * 0.5;
+    hero.style.backgroundPosition = `center calc(50% + ${pos}px)`;
+  });
+
+</script>
+
+</body>
+</html>
+
